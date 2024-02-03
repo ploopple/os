@@ -21,12 +21,14 @@ clean:
 	rm -rf build/*
 
 build:
-	x86_64-elf-as --32 src/kernel/arch/x86/boot.s -o build/boot.o
-	x86_64-elf-as --32 src/kernel/arch/x86/crti.s -o build/crti.o
-	x86_64-elf-as --32 src/kernel/arch/x86/crtn.s -o build/crtn.o
+	x86_64-elf-as -g --32 src/kernel/arch/x86/boot.s -o build/boot.o
+	x86_64-elf-as -g --32 src/kernel/arch/x86/crti.s -o build/crti.o
+	x86_64-elf-as -g --32 src/kernel/arch/x86/crtn.s -o build/crtn.o
 	x86_64-elf-gcc $(CFLAGS) src/kernel/main.c -o build/kernel.o
-	x86_64-elf-ld -T src/kernel/arch/x86/linker.ld -m elf_i386 -o build/os build/boot.o build/kernel.o build/crti.o build/crtn.o 
+	x86_64-elf-ld -g -T src/kernel/arch/x86/linker.ld -m elf_i386 -o build/os build/boot.o build/kernel.o build/crti.o build/crtn.o 
 
 run: build/os
 	qemu-system-x86_64 -kernel build/os
-debug:
+
+debug: build/os
+	qemu-system-x86_64 -s -S -kernel build/os
