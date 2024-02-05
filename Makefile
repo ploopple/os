@@ -28,10 +28,10 @@ build:
 	ld -T src/kernel/arch/x86/linker.ld -m elf_i386 -o build/os build/boot.o build/kernel.o build/crti.o build/crtn.o 
 
 r: build/os
-	qemu-system-x86_64 -kernel build/os
+	qemu-system-i386 -kernel build/os
 
 d: build/os
-	qemu-system-x86_64 -s -S -kernel build/os
+	qemu-system-i386 -s -S -kernel build/os
 
 docker-build: Dockerfile
 	docker build -t os .
@@ -39,5 +39,5 @@ docker-build: Dockerfile
 docker-run: Dockerfile
 	docker run --cap-add=SYS_PTRACE  -it -v .:/os os
 
-lldb: build/os
-	lldb -o "gdb-remote host.docker.internal:1234" build/os
+gdb: build/os
+	gdb build/os -ex "target remote host.docker.internal:1234"

@@ -9,4 +9,5 @@ RUN apk update && \
     apk add binutils && \ 
     apk add gcc && \ 
     apk add make && \ 
-    apk add  lldb \ 
+    apk add gdb && \  
+    echo "done" \ 
